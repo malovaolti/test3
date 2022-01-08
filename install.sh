@@ -1,4 +1,15 @@
 #!/bin/sh
+echo "ipv6 adresiniz";read IP6
+vultd=$(find /sys/class/net ! -type d | xargs --max-args=1 realpath  | awk -F\/ '/pci/{print $NF}')
+
+echo "NETWORKING_IPV6=yes" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
+echo "IPV6INIT=yes" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
+echo "IPV6ADDR=${IP6}::2" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
+echo "IPV6_DEFAULTGW=${IP6}::1" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
+ifup ${vultd}
+ip -6 addr add ${IP6}::2/48 dev ${vultd}
+ip -6 route add default via ${IP6}::1
+ip -6 route add local ${IP6}::/48 dev lo
 yum update -y
 sleep 0.4
 yum install wget -y
@@ -112,7 +123,6 @@ WORKDATA="${WORKDIR}/data.txt"
 mkdir $WORKDIR && cd $_
 
 IP4=$(curl -4 -s icanhazip.com)
-echo "ipv6 adresiniz";read IP6
 
 echo "Internal ip = ${IP4}. Exteranl sub for ip6 = ${IP6}"
 
