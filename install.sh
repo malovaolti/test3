@@ -4,6 +4,7 @@ sleep 0.4
 yum install wget -y
 sleep 0.4
 yum install nano -y
+yum -y install wget nano epel-release net-tools
 sleep 0.4
 yum install gcc -y
 sleep 0.3
