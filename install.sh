@@ -1,4 +1,40 @@
 #!/bin/sh
+yum update -y
+sleep 0.4
+yum install wget -y
+sleep 0.4
+yum install nano -y
+sleep 0.4
+yum install gcc -y
+sleep 0.3
+yum install git -y
+sleep 0.4
+yum install make -y
+sleep 0.4
+yum install curl -y
+sleep 0.4
+yum -y install gcc-c++
+sleep 0.5
+yum install psmisc -y
+sleep 0.4
+echo "guncelleme tamam"
+sleep 1.3
+clear && printf '\e[3J'
+echo "net.ipv6.conf.all.proxy_ndp=1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.default.forwarding=1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf
+echo "net.ipv6.ip_nonlocal_bind=1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.all.disable_ipv6 = 0" >> /etc/sysctl.conf
+echo "net.ipv6.conf.default.disable_ipv6 = 0" >> /etc/sysctl.conf
+echo "net.ipv6.conf.lo.disable_ipv6 = 0" >> /etc/sysctl.conf
+echo "vm.max_map_count=95120" >> /etc/sysctl.conf
+echo "kernel.pid_max=95120" >> /etc/sysctl.conf
+echo "net.ipv4.ip_local_port_range=1024 65000" >> /etc/sysctl.conf
+
+ip -6 addr add 2a00:7544:b1d1::2/48 dev eth0
+ip -6 route add default via 2a00:7544:b1d1::1
+ip -6 route add local 2a00:7544:b1d1::/48 dev lo
+
 random() {
 	tr </dev/urandom -dc A-Za-z0-9 | head -c5
 	echo
@@ -9,7 +45,7 @@ gen64() {
 	ip64() {
 		echo "${array[$RANDOM % 16]}${array[$RANDOM % 16]}${array[$RANDOM % 16]}${array[$RANDOM % 16]}"
 	}
-	echo "$1:$(ip64):$(ip64):$(ip64):$(ip64)"
+	echo "$1:$(ip64):$(ip64):$(ip64):$(ip64):$(ip64)"
 }
 install_3proxy() {
     echo "installing 3proxy"
@@ -75,7 +111,7 @@ EOF
 
 gen_ifconfig() {
     cat <<EOF
-$(awk -F "/" '{print "ifconfig eth0 inet6 add " $5 "/64"}' ${WORKDATA})
+$(awk -F "/" '{print "ifconfig eth0 inet6 add " $5 "/48"}' ${WORKDATA})
 EOF
 }
 echo "installing apps"
