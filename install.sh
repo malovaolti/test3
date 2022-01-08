@@ -22,10 +22,6 @@ echo "guncelleme tamam"
 sleep 1.3
 clear && printf '\e[3J'
 
-ip -6 addr add 2a00:7544:b1d1::2/48 dev eth0
-ip -6 route add default via 2a00:7544:b1d1::1
-ip -6 route add local 2a00:7544:b1d1::/48 dev lo
-
 random() {
 	tr </dev/urandom -dc A-Za-z0-9 | head -c5
 	echo
@@ -139,6 +135,10 @@ bash ${WORKDIR}/boot_ifconfig.sh
 ulimit -n 10048
 service 3proxy start
 EOF
+
+ip -6 addr add ${IP6}::2/48 dev eth0
+ip -6 route add default via ${IP6}::1
+ip -6 route add local ${IP6}::/48 dev lo
 
 bash /etc/rc.local
 
