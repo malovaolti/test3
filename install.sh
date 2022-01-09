@@ -8,7 +8,12 @@ echo ""
 echo ""
 echo ""
 echo ""
+echo "/64 icin = 64 enter, /48 icin = 48 enter";read hlt24
 vultd=$(find /sys/class/net ! -type d | xargs --max-args=1 realpath  | awk -F\/ '/pci/{print $NF}')
+echo ""
+echo ""
+echo ""
+echo ""
 echo "network'u support ekledimi evet/hayır";read hlt2
 if [ $hlt2 = "hayır" ] ; then
 echo "NETWORKING_IPV6=yes" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
@@ -56,7 +61,11 @@ gen64() {
 	ip64() {
 		echo "${array[$RANDOM % 16]}${array[$RANDOM % 16]}${array[$RANDOM % 16]}${array[$RANDOM % 16]}"
 	}
+	if [ $hlt24 = "48" ] ; then
 	echo "$1:$(ip64):$(ip64):$(ip64):$(ip64):$(ip64)"
+	elif [ $hlt24 = "64" ] ; then
+	echo "$1:$(ip64):$(ip64):$(ip64):$(ip64)"
+	fi
 }
 install_3proxy() {
     echo "installing 3proxy"
