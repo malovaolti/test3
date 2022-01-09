@@ -1,13 +1,17 @@
 #!/bin/sh
 echo "ipv6 adresiniz";read IP6
 vultd=$(find /sys/class/net ! -type d | xargs --max-args=1 realpath  | awk -F\/ '/pci/{print $NF}')
-
+echo "network'u support ekledimi evet/hayır";read hlt2
+if [ $hlt2 = "hayır" ] ; then
 echo "NETWORKING_IPV6=yes" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
 echo "IPV6INIT=yes" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
 echo "IPV6ADDR=${IP6}::2" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
 echo "IPV6_DEFAULTGW=${IP6}::1" >> /etc/sysconfig/network-scripts/ifcfg-${vultd}
 ifup ${vultd}
 ifup ${vultd}
+elif [ $hlt2 = "evet" ] ; then
+echo ""
+fi
 ip -6 addr add ${IP6}::2/48 dev ${vultd}
 ip -6 route add default via ${IP6}::1
 ip -6 route add local ${IP6}::/48 dev lo
