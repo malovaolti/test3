@@ -1,5 +1,13 @@
 #!/bin/sh
+echo ""
+echo ""
+echo ""
+echo ""
 echo "ipv6 adresiniz";read IP6
+echo ""
+echo ""
+echo ""
+echo ""
 vultd=$(find /sys/class/net ! -type d | xargs --max-args=1 realpath  | awk -F\/ '/pci/{print $NF}')
 echo "network'u support ekledimi evet/hayır";read hlt2
 if [ $hlt2 = "hayır" ] ; then
